@@ -13,7 +13,7 @@ easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General
 
 ## Introduction
 
-Welcome to **OPENMINDx**, an advanced AI-driven solution designed to facilitate autonomous general intelligence (AGI) through a sophisticated and user-friendly interface, **easyAGI**. Created by Gregory L. Magnusson in 2024 under the MIT license, OpenMindX leverages cutting-edge machine learning, deep learning, and natural language processing technologies to deliver a seamless, intuitive, and highly effective AGI experience.
+Welcome to **OPENMINDx**, an advanced AI-driven solution designed to facilitate autonomous general intelligence (AGI) through a sophisticated and user-friendly interface, **easyAGI**. openmindx leverages cutting-edge machine learning, deep learning, and natural language processing technologies to deliver seamless, intuitive, and highly effective AGI experiences.
 
 ## Features
 
