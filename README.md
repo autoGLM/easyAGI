@@ -26,6 +26,8 @@ easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General
    ```bash
    git clone https://github.com/openmindx/easyAGI
    cd easyAGI
+   python3 -m venv easyagi
+   source easyagi/bin/activate
    pip install -r requirements.txt
    python3 easyAGI.py
 
