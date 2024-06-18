@@ -2,7 +2,7 @@ easy Autonomous General Intelligence
 
 ## Introduction
 
-easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General Intelligence (AGI) solution creator designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent solutions in real-time. mastermind is the controller of agency. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence.
+easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General Intelligence (AGI) solution creator designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence.
 
 
 # openmindx
@@ -47,6 +47,7 @@ Welcome to **OPENMINDx**, an advanced AI-driven solution designed to facilitate 
 - expand self_healing.py
 - include mastermind.agency.py
 - llama2 integrations
+- mastermind as the controller of agency.
 
 ## Requirements
 
