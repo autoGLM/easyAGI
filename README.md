@@ -1,7 +1,7 @@
 # easyAGI (c) Gregory L. Magnusson GPLv3 2024
-easy Autonomous General Intelligence
-
 # openmindx (c) Gregory L. Magnusson 2024 MIT license
+
+easy Autonomous General Intelligence
 
 ## Introduction
 
