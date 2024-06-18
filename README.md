@@ -1,11 +1,12 @@
 # easyAGI (c) Gregory L. Magnusson GPLv3 2024
-# openmindx (c) Gregory L. Magnusson 2024 MIT license
+# openmindx (c) Gregory L. Magnusson MIT license 2024
+# mastermind (c) codephreak MIT licence 2024
 
 easy Autonomous General Intelligence
 
 ## Introduction
 
-easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General Intelligence (AGI) solution creator designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent solutions in real-time.
+easyAGI is the UIUX to **openmindx** to create an easy-to-use Autonomous General Intelligence (AGI) solution creator designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent solutions in real-time. mastermind is the controller of agency.
 
 ## Features
 
