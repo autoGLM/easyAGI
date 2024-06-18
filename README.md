@@ -39,10 +39,17 @@ Welcome to **OpenMindX**, an advanced AI-driven solution designed to facilitate 
 
 ## Features
 
-- Simple user interface to input problems and receive solutions.
-- Utilizes OpenAI's GPT-4 model for generating solutions.
+- Simple terminal interface to input problems and receive solutions.
+- custom API inclusion including OpenAI's GPT-4 model for generating solutions.
 - Continuously runs, allowing for multiple queries until the user decides to exit.
+- local context from memory
 - Modular design for easy extension and integration with other systems.
+
+## future
+
+- integration with an executable environment
+- expand self_healing.py
+- include mastermind.agency.py
 
 ## Requirements
 
