@@ -1,5 +1,4 @@
-# easyAGI (c) Gregory L. Magnusson GPLv3 license 2024
-# easyAGI.py
+# openmind (c) Gregory L. Magnusson 2024 MIT license
 import openai
 from api import APIManager
 
@@ -18,14 +17,14 @@ else:
 def get_solution_from_agi(agi_prompt):
     prompt = f"Autonomous general intelligence return solution: {agi_prompt}."
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
             {"role": "user", "content": prompt}
         ]
     )
-    solution = response.choices[0].message['content']
+    solution = response.choices[0].message.content
     return solution
 
 def main():

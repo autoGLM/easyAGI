@@ -1,19 +1,14 @@
 # api.py
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key, unset_key
+from dotenv.main import DotEnv
 
 class APIManager:
     def __init__(self, env_file='.env'):
         self.env_file = env_file
-        self.check_env_file()
+        self.dotenv = DotEnv(self.env_file)
         load_dotenv(self.env_file)
         self.api_keys = self.load_api_keys()
-
-    def check_env_file(self):
-        if not os.path.exists(self.env_file):
-            with open(self.env_file, 'w') as f:
-                f.write("# Environment variables\n")
-            print(f"{self.env_file} created.")
 
     def load_api_keys(self):
         api_keys = {}
@@ -39,11 +34,26 @@ class APIManager:
         key_name = f"{api_name.upper()}_API_KEY"
         return self.api_keys.get(key_name)
 
+    def remove_api_key(self, api_name):
+        key_name = f"{api_name.upper()}_API_KEY"
+        if key_name in self.api_keys:
+            unset_key(self.env_file, key_name)
+            del self.api_keys[key_name]
+            print(f"API key for {api_name} removed.")
+        else:
+            print(f"No API key found for {api_name}.")
+
+    def list_api_keys(self):
+        print("Loaded API keys:")
+        for key in self.api_keys.keys():
+            api_name = key.replace('_API_KEY', '').lower()
+            print(f"- {api_name}")
+
     def ensure_api_keys(self):
         if not self.api_keys:
             self.add_api_key()
         else:
-            print("API keys loaded successfully.")
+            self.list_api_keys()
 
 # Usage example
 if __name__ == "__main__":
@@ -55,3 +65,8 @@ if __name__ == "__main__":
         print(f"OpenAI API key: {openai_api_key}")
     else:
         print("OpenAI API key not found.")
+    
+    # Example of how to remove an API key
+    api_manager.remove_api_key('openai')
+    api_manager.list_api_keys()
+
