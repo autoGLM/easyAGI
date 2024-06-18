@@ -1,8 +1,11 @@
 # easyAGI.py
-# openmindx (c) Gregory L. Magnusson 2024 MIT license
-# easyAGI (c) Gregory L. Magnusson 2024 GPLv3 license
+# openmind (c) Gregory L. Magnusson 2024 MIT license
 import openai
 from api import APIManager
+from bdi import BDIModel, Belief, Desire, Intention
+from logic import LogicTables
+from SocraticReasoning import SocraticReasoning
+from reasoning import Reasoning
 
 # Initialize API Manager and ensure API keys are available
 api_manager = APIManager()
@@ -15,6 +18,12 @@ if openai_api_key:
 else:
     print("OpenAI API key not found. Exiting...")
     exit(1)
+
+# Initialize BDI Model, Logic Tables, Socratic Reasoning, and Reasoning
+bdi_model = BDIModel()
+logic_tables = LogicTables()
+socratic_reasoner = SocraticReasoning()
+reasoner = Reasoning()
 
 def get_solution_from_agi(agi_prompt):
     prompt = f"Autonomous general intelligence return solution: {agi_prompt}."
@@ -34,8 +43,35 @@ def main():
         agi_prompt = input("Enter the problem to solve (or type 'exit' to quit): ")
         if agi_prompt.lower() == 'exit':
             break
+        
+        # Update beliefs with the new prompt
+        new_belief = Belief(agi_prompt)
+        bdi_model.update_beliefs({agi_prompt: new_belief})
+        
+        # Set desires based on the new belief
+        new_desire = Desire(f"Solve: {agi_prompt}")
+        bdi_model.set_desires([new_desire])
+        
+        # Form intentions based on beliefs and desires
+        bdi_model.form_intentions()
+        
+        # Utilize logic tables for enhanced reasoning
+        logic_tables.add_variable('Belief')
+        logic_tables.add_expression('True')  # Simplified example
+        logic_tables.display_truth_table()
+        
+        # Add premises for Socratic reasoning
+        socratic_reasoner.add_premise(agi_prompt)
+        socratic_reasoner.draw_conclusion()
+
+        # Add premises for general reasoning
+        reasoner.add_premise(agi_prompt)
+        reasoner.draw_conclusion()
+        
+        # Get solution from AGI
         solution = get_solution_from_agi(agi_prompt)
         print(f"\nSolution:\n{solution}\n")
 
 if __name__ == "__main__":
     main()
+

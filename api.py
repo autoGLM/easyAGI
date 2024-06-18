@@ -18,7 +18,7 @@ class APIManager:
 
     def add_api_key(self):
         while True:
-            api_name = input("Enter API name (or press r to remove an API key, or press Enter to continue): ").strip()
+            api_name = input("Enter API name (or press r to remove an API key, or press Enter to quit): ").strip()
             if not api_name:
                 break
             if api_name.lower() == 'r':
@@ -76,3 +76,4 @@ if __name__ == "__main__":
     # Example of how to remove an API key
     api_manager.remove_api_key('openai')
     api_manager.list_api_keys()
+
