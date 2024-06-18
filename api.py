@@ -1,6 +1,5 @@
-# api.py
 import os
-from dotenv import load_dotenv, set_key, unset_key
+from dotenv import load_dotenv, set_key, unset_key, dotenv_values
 from dotenv.main import DotEnv
 
 class APIManager:
@@ -12,22 +11,29 @@ class APIManager:
 
     def load_api_keys(self):
         api_keys = {}
-        for key, value in os.environ.items():
+        for key, value in dotenv_values(self.env_file).items():
             if key.endswith('_API_KEY'):
                 api_keys[key] = value
         return api_keys
 
     def add_api_key(self):
-        print("No API keys found. Please add API keys.")
         while True:
-            api_name = input("Enter API name (or press Enter to finish): ").strip()
+            api_name = input("Enter API name (or press r to remove an API key, or press Enter to continue): ").strip()
             if not api_name:
                 break
+            if api_name.lower() == 'r':
+                self.list_api_keys()
+                api_name_to_remove = input("Enter the API name to remove: ").strip()
+                if api_name_to_remove:
+                    self.remove_api_key(api_name_to_remove)
+                continue
             api_key = input(f"Enter API key for {api_name}: ").strip()
+            if not api_key:
+                print("API key cannot be empty.")
+                continue
             key_name = f"{api_name.upper()}_API_KEY"
             self.api_keys[key_name] = api_key
-            with open(self.env_file, 'a') as f:
-                f.write(f"\n{key_name}={api_key}")
+            set_key(self.env_file, key_name, api_key)
             print(f"API key for {api_name} added.")
 
     def get_api_key(self, api_name):
@@ -59,6 +65,7 @@ class APIManager:
 if __name__ == "__main__":
     api_manager = APIManager()
     api_manager.ensure_api_keys()
+    
     # Example of how to get an API key
     openai_api_key = api_manager.get_api_key('openai')
     if openai_api_key:
@@ -69,4 +76,3 @@ if __name__ == "__main__":
     # Example of how to remove an API key
     api_manager.remove_api_key('openai')
     api_manager.list_api_keys()
-
