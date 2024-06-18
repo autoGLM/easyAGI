@@ -1,4 +1,6 @@
-# openmind (c) Gregory L. Magnusson 2024 MIT license
+# easyAGI.py
+# openmindx (c) Gregory L. Magnusson 2024 MIT license
+# easyAGI (c) Gregory L. Magnusson 2024 GPLv3 license
 import openai
 from api import APIManager
 
