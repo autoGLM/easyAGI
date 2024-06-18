@@ -6,94 +6,93 @@ from bdi import BDIModel, Belief, Desire, Intention
 from logic import LogicTables
 from SocraticReasoning import SocraticReasoning
 from reasoning import Reasoning
-from self_healing import SelfHealing
-from memory import save_conversation_memory, load_conversation_memory, delete_conversation_memory, get_latest_memory
+from self_healing import SelfHealingSystem
+from memory import save_conversation_memory, load_conversation_memory, delete_conversation_memory
 
-# Initialize API Manager and ensure API keys are available
-api_manager = APIManager()
-api_manager.ensure_api_keys()
+class AGI:
+    def __init__(self):
+        # Initialize components
+        self.api_manager = APIManager()
+        self.api_manager.ensure_api_keys()
+        self.openai_api_key = self.api_manager.get_api_key('openai')
+        
+        if self.openai_api_key:
+            openai.api_key = self.openai_api_key
+        else:
+            print("OpenAI API key not found. Exiting...")
+            exit(1)
+        
+        self.bdi_model = BDIModel()
+        self.logic_tables = LogicTables()
+        self.socratic_reasoner = SocraticReasoning()
+        self.reasoner = Reasoning()
+        self.self_healer = SelfHealingSystem()
 
-# Set the OpenAI API key from the loaded API keys
-openai_api_key = api_manager.get_api_key('openai')
-if openai_api_key:
-    openai.api_key = openai_api_key
-else:
-    print("OpenAI API key not found. Exiting...")
-    exit(1)
+    def perceive_environment(self):
+        # This method should gather data from the environment
+        agi_prompt = input("Enter the problem to solve (or type 'exit' to quit): ")
+        return agi_prompt
+    
+    def learn_from_data(self, data):
+        # This method should process and learn from the gathered data
+        new_belief = Belief(data)
+        self.bdi_model.update_beliefs({data: new_belief})
+        
+        new_desire = Desire(f"Solve: {data}")
+        self.bdi_model.set_desires([new_desire])
+        
+        self.bdi_model.form_intentions()
+        
+        self.logic_tables.add_variable('Belief')
+        self.logic_tables.add_expression('True')  # Simplified example
+        self.logic_tables.display_truth_table()
+        
+        self.socratic_reasoner.add_premise(data)
+        self.socratic_reasoner.draw_conclusion()
 
-# Initialize BDI Model, Logic Tables, Socratic Reasoning, Reasoning, and Self Healing
-bdi_model = BDIModel()
-logic_tables = LogicTables()
-socratic_reasoner = SocraticReasoning()
-reasoner = Reasoning()
-self_healer = SelfHealing()
+        self.reasoner.add_premise(data)
+        self.reasoner.draw_conclusion()
+        
+        return data
+    
+    def make_decisions(self, knowledge):
+        # This method should make decisions based on the learned knowledge
+        prompt = f"Autonomous general intelligence return solution: {knowledge}."
+        
+        response = openai.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        decision = response.choices[0].message.content
+        return decision
+    
+    def communicate_response(self, decisions):
+        # This method should communicate the decisions made
+        print(f"\nSolution:\n{decisions}\n")
+    
+    def main_loop(self):
+        # Main loop to continuously perceive, learn, decide, and communicate
+        conversation_memory = []
+        while True:
+            environment_data = self.perceive_environment()
+            if environment_data.lower() == 'exit':
+                save_conversation_memory(conversation_memory)
+                break
 
-# Initialize conversation memory
-conversation_memory = []
+            learned_knowledge = self.learn_from_data(environment_data)
+            decisions = self.make_decisions(learned_knowledge)
+            self.communicate_response(decisions)
 
-def get_solution_from_agi(agi_prompt):
-    prompt = f"Autonomous general intelligence return solution: {agi_prompt}."
-
-    response = openai.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
-            {"role": "user", "content": prompt}
-        ]
-    )
-    solution = response.choices[0].message.content
-    return solution
+            # Save the dialogue to memory
+            conversation_memory.append((environment_data, decisions))
 
 def main():
-    global conversation_memory
-
-    while True:
-        agi_prompt = input("Enter the problem to solve (or type 'exit' to quit, 'load' to load memory, 'delete' to delete memory): ")
-        if agi_prompt.lower() == 'exit':
-            save_conversation_memory(conversation_memory)
-            break
-        elif agi_prompt.lower() == 'load':
-            conversation_memory = load_conversation_memory()
-            for entry in conversation_memory:
-                print(f"Instruction: {entry['instruction']}\nResponse: {entry['response']}\n")
-            continue
-        elif agi_prompt.lower() == 'delete':
-            delete_conversation_memory()
-            conversation_memory = []
-            print("Memory deleted.")
-            continue
-
-        # Update beliefs with the new prompt
-        new_belief = Belief(agi_prompt)
-        bdi_model.update_beliefs({agi_prompt: new_belief})
-        
-        # Set desires based on the new belief
-        new_desire = Desire(f"Solve: {agi_prompt}")
-        bdi_model.set_desires([new_desire])
-        
-        # Form intentions based on beliefs and desires
-        bdi_model.form_intentions()
-        
-        # Utilize logic tables for enhanced reasoning
-        logic_tables.add_variable('Belief')
-        logic_tables.add_expression('True')  # Simplified example
-        logic_tables.display_truth_table()
-        
-        # Add premises for Socratic reasoning
-        socratic_reasoner.add_premise(agi_prompt)
-        socratic_reasoner.draw_conclusion()
-
-        # Add premises for general reasoning
-        reasoner.add_premise(agi_prompt)
-        reasoner.draw_conclusion()
-        
-        # Get solution from AGI
-        solution = get_solution_from_agi(agi_prompt)
-        print(f"\nSolution:\n{solution}\n")
-
-        # Save the dialogue to memory
-        conversation_memory.append((agi_prompt, solution))
-
+    agi = AGI()
+    agi.main_loop()
+    
 if __name__ == "__main__":
     main()
 
