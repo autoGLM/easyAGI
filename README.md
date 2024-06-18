@@ -50,11 +50,12 @@ Welcome to **OpenMindX**, an advanced AI-driven solution designed to facilitate 
 - integration with an executable environment
 - expand self_healing.py
 - include mastermind.agency.py
+- llama2 integrations
 
 ## Requirements
 
 - Python 3.6+
-- OpenAI API key
+- API key openai GPT-4o
 - `python-dotenv` package
 
 ## Installation venv recommended
