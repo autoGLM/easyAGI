@@ -1,29 +1,16 @@
 import logging
 import openai
-from api import APIManager
 
 # Initialize logging
 logging.basicConfig(filename='reasoning.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 class Reasoning:
-    def __init__(self, max_tokens=50):
+    def __init__(self, max_tokens=100):
         self.premises = []
         self.logger = logging.getLogger('Reasoning')
         self.logger.setLevel(logging.INFO)
         self.max_tokens = max_tokens
-
-        # Initialize API Manager and ensure API keys are available
-        api_manager = APIManager()
-        api_manager.ensure_api_keys()
-
-        # Set the OpenAI API key from the loaded API keys
-        openai_api_key = api_manager.get_api_key('openai')
-        if openai_api_key:
-            openai.api_key = openai_api_key
-        else:
-            self.log("OpenAI API key not found. Exiting...", level='error')
-            exit(1)
 
     def log(self, message, level='info'):
         if level == 'info':
@@ -51,7 +38,7 @@ class Reasoning:
         premise_text = "\n".join(f"- {premise}" for premise in self.premises)
         prompt = f"Based on the premises:\n{premise_text}\nProvide a logical conclusion."
 
-        response = openai.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
