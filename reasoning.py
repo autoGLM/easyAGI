@@ -7,7 +7,7 @@ logging.basicConfig(filename='reasoning.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 class Reasoning:
-    def __init__(self, max_tokens=150):
+    def __init__(self, max_tokens=50):
         self.premises = []
         self.logger = logging.getLogger('Reasoning')
         self.logger.setLevel(logging.INFO)
@@ -51,7 +51,7 @@ class Reasoning:
         premise_text = "\n".join(f"- {premise}" for premise in self.premises)
         prompt = f"Based on the premises:\n{premise_text}\nProvide a logical conclusion."
 
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},

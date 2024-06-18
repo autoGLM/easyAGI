@@ -6,6 +6,8 @@ from bdi import BDIModel, Belief, Desire, Intention
 from logic import LogicTables
 from SocraticReasoning import SocraticReasoning
 from reasoning import Reasoning
+from self_healing import SelfHealing
+from memory import save_conversation_memory, load_conversation_memory, delete_conversation_memory, get_latest_memory
 
 # Initialize API Manager and ensure API keys are available
 api_manager = APIManager()
@@ -19,11 +21,15 @@ else:
     print("OpenAI API key not found. Exiting...")
     exit(1)
 
-# Initialize BDI Model, Logic Tables, Socratic Reasoning, and Reasoning
+# Initialize BDI Model, Logic Tables, Socratic Reasoning, Reasoning, and Self Healing
 bdi_model = BDIModel()
 logic_tables = LogicTables()
 socratic_reasoner = SocraticReasoning()
 reasoner = Reasoning()
+self_healer = SelfHealing()
+
+# Initialize conversation memory
+conversation_memory = []
 
 def get_solution_from_agi(agi_prompt):
     prompt = f"Autonomous general intelligence return solution: {agi_prompt}."
@@ -39,11 +45,24 @@ def get_solution_from_agi(agi_prompt):
     return solution
 
 def main():
+    global conversation_memory
+
     while True:
-        agi_prompt = input("Enter the problem to solve (or type 'exit' to quit): ")
+        agi_prompt = input("Enter the problem to solve (or type 'exit' to quit, 'load' to load memory, 'delete' to delete memory): ")
         if agi_prompt.lower() == 'exit':
+            save_conversation_memory(conversation_memory)
             break
-        
+        elif agi_prompt.lower() == 'load':
+            conversation_memory = load_conversation_memory()
+            for entry in conversation_memory:
+                print(f"Instruction: {entry['instruction']}\nResponse: {entry['response']}\n")
+            continue
+        elif agi_prompt.lower() == 'delete':
+            delete_conversation_memory()
+            conversation_memory = []
+            print("Memory deleted.")
+            continue
+
         # Update beliefs with the new prompt
         new_belief = Belief(agi_prompt)
         bdi_model.update_beliefs({agi_prompt: new_belief})
@@ -71,6 +90,9 @@ def main():
         # Get solution from AGI
         solution = get_solution_from_agi(agi_prompt)
         print(f"\nSolution:\n{solution}\n")
+
+        # Save the dialogue to memory
+        conversation_memory.append((agi_prompt, solution))
 
 if __name__ == "__main__":
     main()
