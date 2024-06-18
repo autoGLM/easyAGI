@@ -1,50 +1,95 @@
 # self_healing.py
 import logging
+import time
+import traceback
 import psutil
 
-class SelfHealing:
-    def __init__(self):
-        self.logger = logging.getLogger('SelfHealing')
-        self.logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
-    def log(self, message, level='info'):
-        if level == 'info':
-            self.logger.info(message)
-        elif level == 'error':
-            self.logger.error(message)
-        print(message)
+class SelfHealingSystem:
+    """
+    Self-Healing System class that monitors and heals itself.
+    """
 
-    def handle_error(self, error_message):
-        self.log(f"Error: {error_message}", level='error')
-        # Implement self-healing logic here
-        self.monitor_system_health()
+    def __init__(self, check_interval=10):
+        """
+        Initializes the self-healing system.
+        
+        :param check_interval: Time interval (in seconds) between health checks
+        """
+        self.check_interval = check_interval
 
-    def adjust_setting(self, setting_name, value):
-        self.log(f"Adjusting setting {setting_name} to {value}")
-        # Implement setting adjustment logic here
+    def is_system_healthy(self) -> bool:
+        """
+        Checks if the system is healthy.
+        
+        :returns: True if the system is healthy, False otherwise.
+        """
+        try:
+            logging.info("Checking system health...")
+            cpu_usage = psutil.cpu_percent(interval=1)
+            memory_info = psutil.virtual_memory()
+            disk_usage = psutil.disk_usage('/')
+            health_status = cpu_usage < 80 and memory_info.percent < 80 and disk_usage.percent < 80
+            logging.info(f"CPU Usage: {cpu_usage}%, Memory Usage: {memory_info.percent}%, Disk Usage: {disk_usage.percent}%")
+            return health_status
+        except Exception as e:
+            logging.error(f"Error checking system health: {e}")
+            return False
 
-    def monitor_system_health(self):
-        # Monitor CPU usage
-        cpu_usage = psutil.cpu_percent(interval=1)
-        self.log(f"CPU Usage: {cpu_usage}%")
+    def heal_system(self):
+        """
+        Tries to heal the system if an issue is detected.
+        """
+        try:
+            logging.info("Attempting to heal the system...")
+            # Example heal method: Restarting a service (placeholder)
+            # self.restart_service("example_service")
+        except Exception as e:
+            logging.error(f"Error during healing process: {e}")
+            logging.debug(traceback.format_exc())
+    
+    def monitor(self):
+        """
+        Continuously monitors the system and applies healing mechanisms if needed.
+        """
+        while True:
+            if self.is_system_healthy():
+                logging.info("System is healthy.")
+            else:
+                logging.error("System is unhealthy! Initiating heal process.")
+                self.heal_system()
+            time.sleep(self.check_interval)
 
-        # Monitor memory usage
-        memory_info = psutil.virtual_memory()
-        self.log(f"Memory Usage: {memory_info.percent}%")
+    def check_database_connection(self) -> bool:
+        """
+        Check if the database connection is alive.
 
-        # Monitor disk usage
-        disk_usage = psutil.disk_usage('/')
-        self.log(f"Disk Usage: {disk_usage.percent}%")
+        :returns: True if connection is alive, otherwise False.
+        """
+        try:
+            # Placeholder for actual database connection check.
+            # db_connection = self.get_database_connection()
+            # return db_connection.is_alive()
+            return True  # Simulating a live database connection.
+        except Exception as e:
+            logging.error(f"Database connection check failed: {e}")
+            return False
+        
+    def restart_service(self, service_name: str):
+        """
+        Restart the given service.
 
-        # Monitor network stats
-        net_io = psutil.net_io_counters()
-        self.log(f"Bytes Sent: {net_io.bytes_sent}")
-        self.log(f"Bytes Received: {net_io.bytes_recv}")
+        :param service_name: Name of the service to restart.
+        """
+        try:
+            logging.info(f"Restarting service: {service_name}")
+            # Placeholder for actual service restart logic.
+            # service_manager.restart(service_name)
+        except Exception as e:
+            logging.error(f"Failed to restart service {service_name}: {e}")
 
-def main():
-    healer = SelfHealing()
-    healer.log('SelfHealing initialized.')
-    healer.monitor_system_health()
-
-if __name__ == '__main__':
-    main()
+# Example usage
+if __name__ == "__main__":
+    healer = SelfHealingSystem(check_interval=5)
+    healer.monitor()
