@@ -1,29 +1,19 @@
+# SocraticReasoning.py
 import logging
-import openai
-from api import APIManager
+from chatter import GPT4o, GroqModel
 
-# Initialize logging
-logging.basicConfig(filename='reasoning.log', level=logging.INFO,
-                    format='%(asctime)s:%(levelname)s:%(message)s')
-
-class SocraticReasoning:
-    def __init__(self, max_tokens=100):
+class Reasoning:
+    def __init__(self, api_key, max_tokens=100, api_provider='openai'):
         self.premises = []
-        self.logger = logging.getLogger('SocraticReasoning')
+        self.logger = logging.getLogger('Reasoning')
         self.logger.setLevel(logging.INFO)
         self.max_tokens = max_tokens
+        self.api_provider = api_provider
 
-        # Initialize API Manager and ensure API keys are available
-        api_manager = APIManager()
-        api_manager.ensure_api_keys()
-
-        # Set the OpenAI API key from the loaded API keys
-        openai_api_key = api_manager.get_api_key('openai')
-        if openai_api_key:
-            openai.api_key = openai_api_key
-        else:
-            self.log("OpenAI API key not found. Exiting...", level='error')
-            exit(1)
+        if api_provider == 'openai':
+            self.chatter = GPT4o(api_key)
+        elif api_provider == 'groq':
+            self.chatter = GroqModel(api_key)
 
     def log(self, message, level='info'):
         if level == 'info':
@@ -51,16 +41,8 @@ class SocraticReasoning:
         premise_text = "\n".join(f"- {premise}" for premise in self.premises)
         prompt = f"Based on the premises:\n{premise_text}\nProvide a logical conclusion."
 
-        response = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are openmindx the easy action event AGI solution creator."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=self.max_tokens
-        )
-
-        conclusion = response.choices[0].message.content
+        # Use the appropriate model to generate the response
+        conclusion = self.chatter.generate_response(prompt)
         self.log(f"Conclusion:\n{conclusion}")
 
     def set_max_tokens(self, max_tokens):
@@ -73,7 +55,7 @@ class SocraticReasoning:
             cmd = input("> ").strip().lower()
             
             if cmd == 'exit':
-                self.log('Exiting SocraticReasoning.')
+                self.log('Exiting Reasoning.')
                 break
             elif cmd == 'add':
                 premise = input("Enter the premise: ").strip()
@@ -93,10 +75,12 @@ class SocraticReasoning:
                 self.log('Invalid command.', level='error')
 
 def main():
-    reasoner = SocraticReasoning()
-    reasoner.log('SocraticReasoning initialized.')
+    # Replace 'your_api_key_here' with the actual API key or retrieve it as needed
+    api_key = 'your_api_key_here'
+    api_provider = 'openai'  # or 'groq'
+    reasoner = Reasoning(api_key, api_provider=api_provider)
+    reasoner.log('Reasoning initialized.')
     reasoner.interact()
 
 if __name__ == '__main__':
     main()
-

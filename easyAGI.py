@@ -8,25 +8,69 @@ from SocraticReasoning import SocraticReasoning
 from reasoning import Reasoning
 from self_healing import SelfHealingSystem
 from memory import save_conversation_memory, load_conversation_memory, delete_conversation_memory
+from chatter import GPT4o, GroqModel, OllamaModel
 
 class AGI:
     def __init__(self):
-        # Initialize components
+        # Initialize API Manager
         self.api_manager = APIManager()
-        self.api_manager.ensure_api_keys()
+        self.manage_api_keys()
+        
         self.openai_api_key = self.api_manager.get_api_key('openai')
-        
-        if self.openai_api_key:
-            openai.api_key = self.openai_api_key
+        self.groq_api_key = self.api_manager.get_api_key('groq')
+        self.ollama_api_key = 'ollama'  # Ollama doesn't require an actual API key, just the identifier
+
+        if self.openai_api_key and self.groq_api_key and self.ollama_api_key:
+            self.chatter = self.select_provider()
+        elif self.openai_api_key:
+            self.chatter = GPT4o(self.openai_api_key)
+        elif self.groq_api_key:
+            self.chatter = GroqModel(self.groq_api_key)
+        elif self.ollama_api_key:
+            self.chatter = OllamaModel()
         else:
-            print("OpenAI API key not found. Exiting...")
-            exit(1)
+            print("No API key found for OpenAI, Groq, or Ollama.")
+            self.manage_api_keys()
         
+        # Initialize other components
         self.bdi_model = BDIModel()
         self.logic_tables = LogicTables()
-        self.socratic_reasoner = SocraticReasoning()
-        self.reasoner = Reasoning()
+        self.socratic_reasoner = SocraticReasoning(self.chatter)  # Pass the chatter instance to SocraticReasoning
+        self.reasoner = Reasoning(self.chatter)  # Pass the chatter instance to Reasoning
         self.self_healer = SelfHealingSystem()
+
+    def manage_api_keys(self):
+        while True:
+            self.api_manager.list_api_keys()
+            action = input("Choose an action: (a) Add API key, (d) Delete API key, (l) List API keys, (Press Enter to continue): ").strip().lower()
+            if not action:
+                self.openai_api_key = self.api_manager.get_api_key('openai')
+                self.groq_api_key = self.api_manager.get_api_key('groq')
+                self.ollama_api_key = 'ollama' if 'ollama' in self.api_manager.api_keys else None
+                if self.openai_api_key or self.groq_api_key or self.ollama_api_key:
+                    break
+                else:
+                    print("No API keys found. Please add at least one API key.")
+            elif action == 'a':
+                self.api_manager.add_api_key_interactive()
+            elif action == 'd':
+                api_name = input("Enter the API name to delete: ").strip()
+                if api_name:
+                    self.api_manager.remove_api_key(api_name)
+            elif action == 'l':
+                self.api_manager.list_api_keys()
+
+    def select_provider(self):
+        while True:
+            choice = input("Multiple API keys found. Select the provider (1 for OpenAI, 2 for Groq, 3 for Ollama): ").strip()
+            if choice == '1':
+                return GPT4o(self.openai_api_key)
+            elif choice == '2':
+                return GroqModel(self.groq_api_key)
+            elif choice == '3':
+                return OllamaModel()
+            else:
+                print("Invalid choice. Please select 1 for OpenAI, 2 for Groq, or 3 for Ollama.")
 
     def perceive_environment(self):
         # This method should gather data from the environment
@@ -45,7 +89,11 @@ class AGI:
         
         self.logic_tables.add_variable('Belief')
         self.logic_tables.add_expression('True')  # Simplified example
-        self.logic_tables.display_truth_table()
+        truth_table = self.logic_tables.generate_truth_table()
+        
+        # Display truth table
+        for row in truth_table:
+            print("\t".join(map(str, row)))
         
         self.socratic_reasoner.add_premise(data)
         self.socratic_reasoner.draw_conclusion()
@@ -57,16 +105,7 @@ class AGI:
     
     def make_decisions(self, knowledge):
         # This method should make decisions based on the learned knowledge
-        prompt = f"Autonomous general intelligence return solution: {knowledge}."
-        
-        response = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        decision = response.choices[0].message.content
+        decision = self.chatter.generate_response(knowledge)
         return decision
     
     def communicate_response(self, decisions):
