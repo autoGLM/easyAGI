@@ -2,7 +2,7 @@ easy Autonomous General Intelligence
 
 ## Introduction
 
-easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution created from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence.
+easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence. The openmindx easyAGI is being used to continue the work on autoGLM (autonomous general learning model)
 
 python3 easyAGI.py; currently the default number of tokens in reasoning.py and SocraticReasoning.py is set remarkably low at 100 tokens.  This is a basic point of departure archived for basic interaction with an API key using pure python. For the most minimalist python3 approach to GPT-4o API interactive example see <a href="https://github.com/openmindx/agi">agi</a>. This project repo is a continuation of the point of departure AGI found at <a href="https://github.com/openmindx/easyAGI">openmindx</a>
 
