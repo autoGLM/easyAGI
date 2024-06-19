@@ -1,54 +1,74 @@
 easy Autonomous General Intelligence
+autonomous general learning model
 
 ## Introduction
 
-easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence. The openmindx easyAGI is being used to continue the work on autoGLM (autonomous general learning model). The code is pure python3 so far and the .md files are markdown documentation of each component. Modular architecture was chosen on purpose so extending or including any aspect of this reasoning agent is straightforward.
+easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence. The openmindx easyAGI is being used to continue the work on autoGLM (autonomous general learning model). The code is pure python3 so far and the .md files are markdown documentation of each component. Modular architecture is intentional for extending or including any aspect of autoGLM into existing projects is straightforward.
 
 python3 easyAGI.py; currently the default number of tokens in reasoning.py and SocraticReasoning.py is set remarkably low at 100 tokens.  This is a basic point of departure archived for basic interaction with an API key using pure python. For the most minimalist python3 approach to GPT-4o API interactive example see <a href="https://github.com/openmindx/agi">agi</a>. This project repo is a continuation of the point of departure AGI found at <a href="https://github.com/openmindx/easyAGI">openmindx</a>
 
-# openmindx
+easyAGI is a modular, Python-based project designed to create an autonomous general intelligence (AGI) interface that leverages various AI models and reasoning frameworks. The project integrates multiple components such as belief-desire-intention (BDI) modeling, logic tables, self-healing systems, and API management to form a cohesive system capable of learning, reasoning, decision-making, and self-maintenance.
+Key Components
 
-## Introduction
+    API Management:
+        APIManager: Handles loading, adding, removing, and listing API keys interactively. It ensures the necessary API keys are available for different AI providers such as OpenAI, Groq, and Ollama.
 
-Welcome to **OPENMINDx**, an advanced AI-driven solution designed to facilitate autonomous general intelligence (AGI) through a sophisticated and user-friendly interface, **easyAGI**. openmindx leverages cutting-edge machine learning, deep learning, and natural language processing technologies to deliver seamless, intuitive, and highly effective AGI experiences.
+    BDI Model:
+        Belief: Represents beliefs with logical and reasoning capabilities.
+        Desire: Defines goals or desires the system aims to achieve.
+        Intention: Outlines plans based on beliefs and desires to accomplish goals.
+        Goal: Evaluates conditions to determine if goals are fulfilled.
+        Reward: Updates and tracks rewards based on achieved goals.
 
-## Features
+    Logic Tables:
+        LogicTables: Manages logical variables and expressions, generates truth tables, and saves state to memory for reasoning processes.
 
-### Autonomous General Intelligence
-- **Dynamic Problem Solving**: OpenMindX is equipped with recursive AGI capabilities to provide reasoning from logic. easyAGI dynamically understands solving a wide range of problems through natural language input.
-- **BDI Model Integration**: Incorporates the Belief-Desire-Intention (BDI) model to enhance decision-making processes and action planning.
+    Reasoning and Socratic Reasoning:
+        Reasoning: Adds, challenges, and draws conclusions from premises using models like GPT-4 or Groq.
+        SocraticReasoning: Employs a Socratic method to challenge premises and derive logical conclusions.
 
-### EasyAGI User Interface
-- **Intuitive Design**: EasyAGI offers a clean, user-friendly interface that simplifies interaction with the AGI system from the terminal using python3. Users can easily input problems, receive solutions, and manage conversation history.
-- **Real-Time Feedback**: Provides instant solutions and conclusions based on user input, facilitating continuous learning and adaptation.
+    Self-Healing System:
+        SelfHealingSystem: Monitors system health (CPU, memory, disk usage), attempts to heal the system if unhealthy, and ensures continuous operation.
 
-### Memory Management
-- **Persistent Storage**: Stores conversation history in a local `memory` folder, ensuring that all interactions are saved for future reference.
-- **Dynamic Loading and Deletion**: Load previous conversations or delete memory as needed, providing flexibility and control over the stored data.
+    Memory Management:
+        Memory: Handles saving, loading, and deleting conversation memories to ensure continuity and historical context.
 
-### Enhanced Reasoning and Logic
-- **Socratic Reasoning**: Utilizes Socratic questioning techniques to challenge and refine premises, ensuring robust and logical conclusions.
-- **Logic Tables**: Implements logic tables to evaluate and verify logical expressions, enhancing the system's reasoning capabilities.
+    Chatter Models:
+        GPT4o, GroqModel, OllamaModel: Interfaces with different AI providers to generate responses based on given knowledge.
 
-### Self-Healing Capabilities (in progress)
-- **Error Handling**: Automatically detects and handles errors, ensuring the system remains stable and reliable.
-- **Dynamic Adjustment**: Allows for real-time adjustment of system settings to optimize performance and response quality.
+    Main AGI Class:
+        AGI: Integrates all components, manages API keys, perceives environment data, learns from data, makes decisions, and communicates responses in an interactive loop.
 
-## Features
+Key Files
 
-- Simple terminal interface to input problems and receive solutions.
-- custom API inclusion including OpenAI's GPT-4 model for generating solutions.
-- Continuously runs, allowing for multiple queries until the user decides to exit.
-- local context from memory
-- Modular design for easy extension and integration with other systems.
+    api.py: Manages API keys.
+    bdi.py: Defines the BDI model components.
+    chatter.py: Implements interfaces for different AI models.
+    easyAGI.py: Main entry point that integrates all components and runs the AGI loop.
+    logic.py: Manages logic tables and truth table generation.
+    memory.py: Handles conversation memory management.
+    reasoning.py: Implements reasoning functionalities.
+    self_healing.py: Implements self-healing system functionalities.
+    SocraticReasoning.py: Implements Socratic reasoning functionalities.
+    test_self_healing.py: Unit tests for the self-healing system.
 
-## future
+Project Goals
 
-- integration with an executable environment
-- expand self_healing.py
-- include mastermind.agency.py
-- llama2 integrations
-- mastermind as the controller of agency.
+    Modular Expansion: The project is designed to be modular, allowing for easy addition of new components and models.
+    Adaptive Learning: Implement continuous learning and adaptation from new data inputs.
+    Comprehensive Reasoning: Enhance reasoning capabilities by integrating more sophisticated logical and Socratic reasoning methods.
+    System Robustness: Ensure system reliability through self-healing mechanisms and robust memory management.
+
+Next Steps
+
+    Expand Reasoning Capabilities: Integrate more advanced reasoning algorithms and models.
+    Improve Memory Management: Enhance the memory system to handle more complex interactions and historical data.
+    Enhance Self-Healing: Develop more sophisticated self-healing methods, such as automated service restarts and resource management.
+    API Integration: Add support for additional AI models and APIs to diversify the AGI's capabilities.
+    User Interface: Develop a user-friendly interface to interact with the AGI system, making it accessible for various applications.
+
+
+# easyAGI using openmindx to create autoGLM
 
 ## Requirements
 
