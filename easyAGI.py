@@ -1,5 +1,4 @@
 # easyAGI.py
-# openmind (c) Gregory L. Magnusson 2024 MIT license
 import openai
 from api import APIManager
 from bdi import BDIModel, Belief, Desire, Intention
@@ -23,6 +22,7 @@ class AGI:
         if self.openai_api_key and self.groq_api_key and self.ollama_api_key:
             self.chatter = self.select_provider()
         elif self.openai_api_key:
+            print(f"DEBUG: Using OpenAI API key: {self.openai_api_key}")  # Debug statement
             self.chatter = GPT4o(self.openai_api_key)
         elif self.groq_api_key:
             self.chatter = GroqModel(self.groq_api_key)
@@ -35,8 +35,8 @@ class AGI:
         # Initialize other components
         self.bdi_model = BDIModel()
         self.logic_tables = LogicTables()
-        self.socratic_reasoner = SocraticReasoning(self.chatter)  # Pass the chatter instance to SocraticReasoning
-        self.reasoner = Reasoning(self.chatter)  # Pass the chatter instance to Reasoning
+        self.socratic_reasoner = SocraticReasoning(self.chatter)  # Pass the chatter instance
+        self.reasoner = Reasoning(self.chatter)  # Pass the chatter instance
         self.self_healer = SelfHealingSystem()
 
     def manage_api_keys(self):
@@ -79,7 +79,7 @@ class AGI:
     
     def learn_from_data(self, data):
         # This method should process and learn from the gathered data
-        new_belief = Belief(data)
+        new_belief = Belief(data, self.chatter)
         self.bdi_model.update_beliefs({data: new_belief})
         
         new_desire = Desire(f"Solve: {data}")
@@ -109,7 +109,7 @@ class AGI:
         return decision
     
     def communicate_response(self, decisions):
-        # This method should communicate the decisions made
+        # This method should communicate the decision made
         print(f"\nSolution:\n{decisions}\n")
     
     def main_loop(self):

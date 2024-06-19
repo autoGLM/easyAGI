@@ -1,19 +1,14 @@
 # reasoning.py
 import logging
-from chatter import GPT4o, GroqModel
+from chatter import GPT4o, GroqModel, OllamaModel
 
 class Reasoning:
-    def __init__(self, api_key, max_tokens=100, api_provider='openai'):
+    def __init__(self, chatter):
         self.premises = []
         self.logger = logging.getLogger('Reasoning')
         self.logger.setLevel(logging.INFO)
-        self.max_tokens = max_tokens
-        self.api_provider = api_provider
-
-        if api_provider == 'openai':
-            self.chatter = GPT4o(api_key)
-        elif api_provider == 'groq':
-            self.chatter = GroqModel(api_key)
+        self.max_tokens = 100
+        self.chatter = chatter
 
     def log(self, message, level='info'):
         if level == 'info':
@@ -77,10 +72,12 @@ class Reasoning:
 def main():
     # Replace 'your_api_key_here' with the actual API key or retrieve it as needed
     api_key = 'your_api_key_here'
-    api_provider = 'openai'  # or 'groq'
-    reasoner = Reasoning(api_key, api_provider=api_provider)
+    api_provider = 'openai'  # or 'groq' or 'ollama'
+    chatter = GPT4o(api_key)  # or GroqModel(api_key), OllamaModel()
+    reasoner = Reasoning(chatter)
     reasoner.log('Reasoning initialized.')
     reasoner.interact()
 
 if __name__ == '__main__':
     main()
+

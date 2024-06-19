@@ -1,15 +1,12 @@
 # chatter.py
-import os
 import openai
-from groq import Groq
-from openai import OpenAI
 
 class GPT4o:
     def __init__(self, openai_api_key):
         self.openai_api_key = openai_api_key
         openai.api_key = self.openai_api_key
 
-    def generate_response(self, knowledge, model="gpt-4"):
+    def generate_response(self, knowledge, model="gpt-4o"):
         prompt = f"Autonomous general intelligence return solution: {knowledge}."
         
         response = openai.chat.completions.create(
@@ -19,7 +16,7 @@ class GPT4o:
                 {"role": "user", "content": prompt}
             ]
         )
-        decision = response.choices[0].message['content']
+        decision = response.choices[0].message.content
         return decision
 
 class GroqModel:
@@ -49,10 +46,9 @@ class OllamaModel:
 
     def generate_response(self, knowledge, model="llama2"):
         prompt = [
-            {"role": "mastermind", "content": "controller of agency"},
-            {"role": "SimpleCoder", "content": "terminal interaction with bash, python and more"},
-            {"role": "autoGLM", "content": "autonomous general learning model"},
-            {"role": "codephreak", "content": "Software Engineer Systems Architect"},
+            {"role": "system", "content": "openmindx"},
+            {"role": "assistant", "content": "agi"},
+            {"role": "tool", "content": "autonomous general learning model"},
             {"role": "user", "content": f"Autonomous general intelligence return solution: {knowledge}."}
         ]
         
