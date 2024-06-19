@@ -18,10 +18,10 @@ dreamer = MachineDreamer(memory_bank, creativity_factor=1.2, api_key="your_api_k
 ```
 
 Methods
-1. _setup_logging()
+ _setup_logging()
 
 Sets up logging for the class to track operations and errors.
-2. _validate_memory_bank(memory_bank: List[str]) -> List[str]
+ _validate_memory_bank(memory_bank: List[str]) -> List[str]
 
 Validates the memory bank to ensure it is a list.
 
@@ -29,7 +29,7 @@ Validates the memory bank to ensure it is a list.
     Returns: Validated memory bank or an empty list if invalid.
     Example: Automatically called during initialization.
 
-3. _validate_creativity_factor(creativity_factor: float) -> float
+ _validate_creativity_factor(creativity_factor: float) -> float
 
 Validates the creativity factor to ensure it is a positive number.
 
@@ -37,14 +37,14 @@ Validates the creativity factor to ensure it is a positive number.
     Returns: Validated creativity factor or 1.0 if invalid.
     Example: Automatically called during initialization.
 
-4. _random_combination() -> str
+ _random_combination() -> str
 
 Creates a random combination of elements from the memory bank.
 
     Returns: A novel combination of elements.
     Example: Automatically called within the dream() method.
 
-5. dream() -> Tuple[str, float]
+ dream() -> Tuple[str, float]
 
 Simulates the dreaming process by generating a creative combination of memory elements.
 
@@ -56,7 +56,7 @@ Simulates the dreaming process by generating a creative combination of memory el
     creative_solution, score = dreamer.dream()
     print("Creative Solution:", creative_solution, "Score:", score)
 
-6. _evaluate_idea(idea: str) -> Tuple[str, float]
+ _evaluate_idea(idea: str) -> Tuple[str, float]
 
 Evaluates the generated idea based on predefined metrics and a language model.
 
@@ -64,7 +64,7 @@ Evaluates the generated idea based on predefined metrics and a language model.
     Returns: A tuple of the idea and its evaluated score.
     Example: Automatically called within the dream() method.
 
-7. _query_language_model(idea: str) -> Tuple[float, float]
+ _query_language_model(idea: str) -> Tuple[float, float]
 
 Sends a query to a language model to evaluate the idea.
 
@@ -72,7 +72,7 @@ Sends a query to a language model to evaluate the idea.
     Returns: A tuple of relevance score and novelty score.
     Example: Automatically called within the _evaluate_idea() method.
 
-8. update_memory(new_data: Union[str, List[str]])
+ update_memory(new_data: Union[str, List[str]])
 
 Updates the memory bank with new experiences or data points.
 
@@ -83,7 +83,7 @@ Updates the memory bank with new experiences or data points.
 
     dreamer.update_memory(['Insight E', 'Fact F'])
 
-9. adjust_creativity(new_factor: float)
+ adjust_creativity(new_factor: float)
 
 Adjusts the creativity factor to increase or decrease randomness in idea generation.
 
@@ -94,7 +94,7 @@ Adjusts the creativity factor to increase or decrease randomness in idea generat
 
     dreamer.adjust_creativity(1.5)
 
-10. set_evaluation_metrics(relevance: float, novelty: float)
+ set_evaluation_metrics(relevance: float, novelty: float)
 
 Sets the evaluation metrics for ideas.
 
