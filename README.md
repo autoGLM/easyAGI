@@ -4,7 +4,7 @@ easy Autonomous General Intelligence
 
 easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution created from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence.
 
-Improvements will follow. While the design plans for an AGI have spanned 20 years of casual thinking 1 year of study and this easyAGI was deployed in 1 day with the help of python3 easyAGI.py; currently the default number of tokens in reasoning.py and SocraticReasoning.py is set quite low at 100 tokens. The field will become dynamic. This current setup is unique as you can watch the machine "think" through premise and truth table.
+Improvements will follow. While the design plans for an AGI have spanned 20 years of casual thinking 1 year of study and this easyAGI was deployed in 1 day with the help of python3 easyAGI.py; currently the default number of tokens in reasoning.py and SocraticReasoning.py is set quite low at 100 tokens. The field will become dynamic. This current setup is unique as you can watch the machine "reason" through premise and truth table.
 
 
 # openmindx
