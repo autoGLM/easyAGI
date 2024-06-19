@@ -38,7 +38,7 @@ class Reasoning:
         premise_text = "\n".join(f"- {premise}" for premise in self.premises)
         prompt = f"Based on the premises:\n{premise_text}\nProvide a logical conclusion."
 
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are openmind the easy action event AGI solution creator."},
