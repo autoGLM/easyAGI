@@ -3,6 +3,8 @@ autonomous general learning model
 
 while this project is working several of the components are not integrated. Work on Autonomous General Learning Model is at the currently private repo <a href="https://github.com/autoGLM/easyGLM">easyGLM</a><br />
 
+This version is second simplest yet highly functional decision from logic model that I have ever experienced. This project is an expansion upon a simple recursive approach to For the most minimalist python3 approach to GPT-4o API interactive example see <a href="https://github.com/openmindx/agi">agi</a>.
+
 once the code is stable the repo will open. may the source be with you.
 
 ## Introduction
