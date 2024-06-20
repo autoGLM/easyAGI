@@ -5,7 +5,7 @@ while this project is working several of the components are not integrated. Work
 
 This version is second simplest yet highly functional decision from logic model that I have ever experienced. This project is an expansion upon a minimalist recursive approach to <a href="https://github.com/openmindx/agi">agi</a>.
 
-once the code is stable the repo will open. may the source be with you.
+ may the source be with you.
 
 ## Introduction
 
