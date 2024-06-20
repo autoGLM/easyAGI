@@ -1,6 +1,10 @@
 easy Autonomous General Intelligence
 autonomous general learning model
 
+while this project is working several of the components are not integrated. Work on Autonomous General Learning Model is at the currently private repo <a href="https://github.com/autoGLM/easyGLM">easyGLM</a><br />
+
+once the code is stable the repo will open. may the source be with you.
+
 ## Introduction
 
 easyAGI is the UIUX to **openmindx** to deploy an easy-to-use Autonomous General Intelligence (AGI) solution from decision. Designed to solve a wide range of problems using the power of API calls including OpenAI's GPT-4 model. This codebase provides a simple interface for users to input problems and receive intelligent decision as solution in real-time. This openmindx expression is a point of departure framework for a machine capable of self devleopment into a robust autonomous general intelligence. The openmindx easyAGI is being used to continue the work on autoGLM (autonomous general learning model). The code is pure python3 so far and the .md files are markdown documentation of each component. Modular architecture is intentional for extending or including any aspect of autoGLM into existing projects is straightforward.
