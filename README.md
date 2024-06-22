@@ -86,7 +86,7 @@ Next Steps
 
 Clone the repository:
    ```bash
-   git clone https://github.com/openmindx/easyAGI
+   git clone https://github.com/autoGLM/easyAGI
    cd easyAGI
    python3 -m venv easyagi
    source easyagi/bin/activate
