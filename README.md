@@ -96,3 +96,6 @@ Clone the repository:
    python3 easyAGI.py
    ```
 
+funAGI is the current working expression
+<a href="https://github.com/autoGLM/funAGI">https://github.com/autoGLM/funAGI</a>
+
