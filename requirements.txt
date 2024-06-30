@@ -1,5 +1,17 @@
+# For interacting with the OpenAI API.
 openai
-python-dotenv
-ujson
-psutil
+
+# For interacting with the groq models
 groq
+
+# For loading environment variables from a .env file.
+python-dotenv
+
+# for UI integration as fastapi
+nicegui
+
+# For fast JSON processing.
+ujson
+
+# For system and process utilities.
+psutil

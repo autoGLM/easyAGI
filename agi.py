@@ -1,137 +1,69 @@
-import numpy as np
 import logging
-from jax import numpy as jnp
-import jax
-from jax import grad, jit, vmap, pmap
-from typing import List, Tuple, Union
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import optax  # For advanced optimization algorithms
-import haiku as hk  # For model building and parameter management
+from SocraticReasoning import SocraticReasoning
+from logic import LogicTables
+from memory.memory import store_in_stm, DialogEntry
+from chatter import GPT4o, Groq
+from api import APIManager  # ensure this import statement is added
 
-class SimpleMind:
-    def __init__(self, input_size, hidden_sizes, output_size, activation='relu', optimizer='adam', learning_rate=0.001, regularization=None, reg_lambda=0.01):
-        """
-        Initialize the SimpleMind neural network.
-        
-        :param input_size: Number of input neurons.
-        :param hidden_sizes: List of the number of neurons in each hidden layer.
-        :param output_size: Number of output neurons.
-        :param activation: Activation function to use ('sigmoid', 'tanh', 'relu').
-        :param optimizer: Optimizer to use ('sgd', 'adam').
-        :param learning_rate: Learning rate for training.
-        :param regularization: Regularization method ('l2').
-        :param reg_lambda: Regularization strength.
-        """
-        self.input_size = input_size
-        self.hidden_sizes = hidden_sizes
-        self.output_size = output_size
-        self.learning_rate = learning_rate
-        self.regularization = regularization
-        self.reg_lambda = reg_lambda
+class AGI:
+    def __init__(self, chatter):
+        # Initialize AGI with a chatter instance and SocraticReasoning
+        self.chatter = chatter
+        self.reasoning = SocraticReasoning(self.chatter)
 
-        self.params = self._initialize_parameters()
+    def learn_from_data(self, data):
+        # Learn from input data
+        proposition_p = data  # For simplicity, treat the entire input as one proposition
+        proposition_q = "processed data"  # placeholder for further processing if needed
+        return proposition_p, proposition_q
 
-        self.activation = activation
-        self.optimizer = optimizer
-        self.opt_state = self._setup_optimizer()
-        self._setup_logging()
+    def make_decisions(self, proposition_p, proposition_q):
+        # Make decisions based on propositions
+        self.reasoning.add_premise(proposition_p)
+        self.reasoning.add_premise(proposition_q)
+        self.reasoning.draw_conclusion()
+        return self.reasoning.logical_conclusion
 
-    def _setup_logging(self):
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+class EasyAGI:
+    def __init__(self):
+        # Initialize EasyAGI with APIManager and AGI instances
+        self.api_manager = APIManager()
+        self.api_manager.manage_api_keys()  # call the method directly from APIManager
+        self.agi = AGI(self.api_manager)
+        self.initialize_memory()
 
-    def _activation_function(self, s):
-        if self.activation == 'sigmoid':
-            return 1 / (1 + jnp.exp(-s))
-        elif self.activation == 'tanh':
-            return jnp.tanh(s)
-        elif self.activation == 'relu':
-            return jnp.maximum(0, s)
-        else:
-            raise ValueError("Unsupported activation function.")
+    def initialize_memory(self):
+        # Initialize memory folders
+        create_memory_folders()
 
-    def _activation_derivative(self, s):
-        if self.activation == 'sigmoid':
-            return s * (1 - s)
-        elif self.activation == 'tanh':
-            return 1 - jnp.power(s, 2)
-        elif self.activation == 'relu':
-            return jnp.where(s > 0, 1, 0)
-        else:
-            raise ValueError("Unsupported activation function.")
+    def main_loop(self):
+        # main_loop to interact with the environment and make decisions
+        while True:
+            environment_data = self.perceive_environment()  # get input from the environment
+            if environment_data.lower() == 'exit':  # exit condition
+                break
 
-    def _initialize_parameters(self):
-        params = {}
-        layer_sizes = [self.input_size] + self.hidden_sizes + [self.output_size]
-        for i in range(len(layer_sizes) - 1):
-            params[f'W{i}'] = jnp.random.randn(layer_sizes[i], layer_sizes[i+1]) * 0.01
-            params[f'b{i}'] = jnp.zeros(layer_sizes[i+1])
-        return params
+            proposition_p, proposition_q = self.agi.learn_from_data(environment_data)  # Learn from data
+            decision = self.agi.make_decisions(proposition_p, proposition_q)  # Make a decision
+            self.communicate_response(decision)  # Communicate the decision
 
-    def forward(self, X, params):
-        activations = X
-        for i in range(len(self.hidden_sizes) + 1):
-            z = jnp.dot(activations, params[f'W{i}']) + params[f'b{i}']
-            activations = self._activation_function(z) if i < len(self.hidden_sizes) else z
-        return activations
+            entry = DialogEntry(environment_data, decision)  # store the dialog entry in memory
+            store_in_stm(entry)
 
-    @jit
-    def backpropagate(self, X, y, params, opt_state):
-        def loss_fn(params):
-            predictions = self.forward(X, params)
-            loss = jnp.mean(jnp.square(y - predictions))
-            if self.regularization == 'l2':
-                l2_penalty = sum(jnp.sum(jnp.square(params[f'W{i}'])) for i in range(len(self.hidden_sizes) + 1))
-                loss += self.reg_lambda * l2_penalty / 2
-            return loss
+    def perceive_environment(self):
+        # Get input from the user
+        agi_prompt = input("")  # environment is empty prompt
+        return agi_prompt
 
-        grads = grad(loss_fn)(params)
-        updates, opt_state = self.optimizer.update(grads, opt_state)
-        new_params = optax.apply_updates(params, updates)
-        return new_params, opt_state
+    def communicate_response(self, decision):
+        # Log and print the decision
+        logging.info(f"Communicating response: {decision}")
+        print(decision)
 
-    def _setup_optimizer(self):
-        if self.optimizer == 'adam':
-            self.optimizer = optax.adam(self.learning_rate)
-        elif self.optimizer == 'sgd':
-            self.optimizer = optax.sgd(self.learning_rate)
-        else:
-            raise ValueError("Unsupported optimizer.")
-        return self.optimizer.init(self.params)
+def main():
+    # Entry point of the program
+    easy_agi = EasyAGI()  # Initialize EasyAGI
+    easy_agi.main_loop()  # Start the main loop
 
-    def train(self, X, y, epochs):
-        for epoch in range(epochs):
-            self.params, self.opt_state = self._parallel_backpropagate(X, y, self.params, self.opt_state)
-            if epoch % 100 == 0:
-                loss = self._calculate_loss(X, y, self.params)
-                logging.info(f"Epoch {epoch}, Loss: {loss}")
-
-    def _parallel_backpropagate(self, X, y, params, opt_state):
-        with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self.backpropagate, X[i], y[i], params, opt_state) for i in range(len(X))]
-            for future in as_completed(futures):
-                params, opt_state = future.result()
-        return params, opt_state
-
-    @jit
-    def _calculate_loss(self, X, y, params):
-        output = self.forward(X, params)
-        loss = jnp.mean(jnp.square(y - output))
-        if self.regularization == 'l2':
-            loss += self.reg_lambda / 2 * sum(jnp.sum(jnp.square(params[f'W{i}'])) for i in range(len(self.hidden_sizes) + 1))
-        return loss
-
-# Example Usage
 if __name__ == "__main__":
-    input_size = 3
-    hidden_sizes = [5, 5]
-    output_size = 1
-    learning_rate = 0.001
-    epochs = 1000
-
-    X = jnp.array([[0.1, 0.2, 0.3]])
-    y = jnp.array([[0.5]])
-
-    mind = SimpleMind(input_size, hidden_sizes, output_size, activation='relu', optimizer='adam', learning_rate=learning_rate, regularization='l2', reg_lambda=0.01)
-
-    mind.train(X, y, epochs)
-    print("Final Output:", mind.forward(X, mind.params))
+    main()  # Run the main function if the script is executed directly
