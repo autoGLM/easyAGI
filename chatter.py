@@ -68,4 +68,3 @@ class OllamaModel:
         except Exception as e:
             logging.error(f"ollama api error: {e}")
             return "error: unable to generate a response due to an issue with the ollama api."
-
