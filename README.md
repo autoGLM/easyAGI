@@ -1,7 +1,8 @@
 easy Autonomous General Intelligence
 autonomous general learning model
 # easyAGI is the goal, funAGI is the current working expression
-<a href="https://github.com/autoGLM/funAGI">https://github.com/autoGLM/funAGI</a>
+<a href="https://github.com/autoGLM/funAGI">https://github.com/autoGLM/funAGI</a> archived for posterity<br />
+<a href="https://github.com/pythaiml/funAGI">https://github.com/pythaiml/funAGI</a> current working expression from UIUX developer logging version<br />
 
 while this project is working several of the components are not integrated. Work on Autonomous General Learning Model is at the currently private repo <a href="https://github.com/autoGLM/easyGLM">easyGLM</a><br />
 
